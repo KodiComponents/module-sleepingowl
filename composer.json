@@ -1,0 +1,33 @@
+{
+    "name":        "kodicms/sleepingowl",
+    "type":        "kodicms-module",
+    "description": "The official KodiCMS Sleeping Owl Admin module",
+    "homepage":    "http://www.kodicms.ru/",
+    "license":     "MIT",
+    "keywords":    ["laravel", "framework", "kodicms", "cms", "module", "sleepingowl"],
+    "authors": [
+        {
+            "name":     "Pavel Buchnev",
+            "email":    "butschster@gmail.com",
+            "homepage": "http://www.kodicms.ru/"
+        },
+        {
+            "name":     "Sleeping Owl",
+            "email":    "owl.sleeping@yahoo.com",
+            "homepage": "https://github.com/sleeping-owl"
+        }
+    ],
+    "support": {
+        "issues":   "https://github.com/KodiComponents/module-sleepingowl/issues",
+        "forum":    "http://www.kodicms.ru/forum",
+        "source":   "https://github.com/KodiComponents/module-sleepingowl"
+    },
+    "autoload": {
+        "psr-4": {
+            "KodiCMS\\SleepingOwlAdmin\\": "src/"
+        }
+    },
+    "require": {
+        "kodicms/module-loader": "3.*"
+    }
+}
