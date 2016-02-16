@@ -24,8 +24,7 @@
 			@endforeach
 		</div>
 	</div>
-	<div class="form-group">
-		<input type="submit" value="{{ trans('sleepingowladmin::core.table.save') }}" class="btn btn-primary"/>
-		<a href="{{ $backUrl }}" class="btn btn-default">{{ trans('sleepingowladmin::core.table.cancel') }}</a>
+	<div class="form-actions panel-footer">
+		@include('cms::app.partials.actionButtons')
 	</div>
 </form>

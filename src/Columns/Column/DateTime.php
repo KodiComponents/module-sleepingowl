@@ -17,10 +17,6 @@ class DateTime extends NamedColumn
      */
     public function getFormat()
     {
-        if (is_null($this->format)) {
-            $this->setFormat(config('sleeping_owl.datetimeFormat'));
-        }
-
         return $this->format;
     }
 

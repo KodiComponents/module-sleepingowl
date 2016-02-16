@@ -4,7 +4,7 @@
     <div class="col-md-9">
         <div class="input-group">
             <input data-date-format="{{ $pickerFormat }}" data-date-useseconds="{{ $seconds ? 'true' : 'false' }}"
-                   class="form-control" name="{{ $name }}" type="text" id="{{ $name }}" value="{{ $value }}"
+                   class="form-control datetimepicker" name="{{ $name }}" type="text" id="{{ $name }}" value="{{ $value }}"
                    @if(isset($readonly))readonly="{{ $readonly }}"@endif>
 
             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>

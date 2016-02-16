@@ -238,6 +238,7 @@ class ModelConfiguration
         if (! is_callable($this->display)) {
             return;
         }
+
         $display = app()->call($this->display);
         if ($display instanceof DisplayInterface) {
             $display->setClass($this->getClass());
@@ -255,6 +256,7 @@ class ModelConfiguration
         if (! is_callable($this->create)) {
             return;
         }
+
         $create = app()->call($this->create);
         if ($create instanceof DisplayInterface) {
             $create->setClass($this->getClass());

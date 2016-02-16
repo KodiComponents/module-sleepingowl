@@ -10,7 +10,7 @@ class BaseDateTime extends NamedFormItem
     /**
      * @var string
      */
-    protected $format;
+    protected $format = 'Y-m-d H:i:s';
 
     /**
      * @var bool
@@ -23,19 +23,10 @@ class BaseDateTime extends NamedFormItem
     protected $pickerFormat;
 
     /**
-     * @var string
-     */
-    protected $defaultConfigFormat = 'datetimeFormat';
-
-    /**
      * @return string
      */
     public function getFormat()
     {
-        if (is_null($this->format)) {
-            $this->setFormat(config('sleeping_owl.'.$this->defaultConfigFormat));
-        }
-
         return $this->format;
     }
 

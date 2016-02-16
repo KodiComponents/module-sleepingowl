@@ -6,7 +6,7 @@
         <div class="radio">
             <label>
                 {!! Form::radio($name, null, is_null($value)) !!}
-                {{ trans('sleepingowladmin::core.select.nothing') }}
+                {{ trans('sleepingowl::core.select.nothing') }}
             </label>
         </div>
         @endif

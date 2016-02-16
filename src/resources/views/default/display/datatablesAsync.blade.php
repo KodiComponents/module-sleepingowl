@@ -6,7 +6,7 @@
 	</div>
 @endif
 @if ($creatable)
-	<a class="btn btn-primary" href="{{ $createUrl }}"><i class="fa fa-plus"></i> {{ trans('sleepingowladmin::core.table.new-entry') }}</a>
+	<a class="btn btn-primary" href="{{ $createUrl }}"><i class="fa fa-plus"></i> {{ trans('sleepingowl::core.table.new-entry') }}</a>
 @endif
 <div class="pull-right tableActions">
 	@foreach ($actions as $action)

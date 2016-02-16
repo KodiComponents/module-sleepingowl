@@ -4,7 +4,7 @@
 <div class="panel">
     <div class="panel-heading">
         @if ($creatable)
-            {!! link_to($createUrl, trans('sleepingowladmin::core.table.new-entry'), [
+            {!! link_to($createUrl, trans('sleepingowl::core.table.new-entry'), [
                 'class' => 'btn btn-primary btn-labeled', 'data-icon' => 'plus'
             ]) !!}
         @endif

@@ -1,9 +1,9 @@
 <?php
 
 Route::group([
-    'middleware' => config('sleeping_owl.middleware'),
-    'prefix' => backend_url_segment().'/sleepingowl',
-    'as' => 'admin.',
+    'middleware' => ['web'],
+    'prefix'     => backend_url_segment().'/sleepingowl',
+    'as'         => 'admin.',
 ], function () {
     Route::get('{adminModel}', [
         'as'   => 'model',
@@ -15,7 +15,7 @@ Route::group([
         'uses' => 'AdminController@getCreate',
     ]);
 
-    Route::post('{adminModel}', [
+    Route::post('{adminModel}/create', [
         'as'   => 'model.store',
         'uses' => 'AdminController@postStore',
     ]);
@@ -25,12 +25,12 @@ Route::group([
         'uses' => 'AdminController@getEdit',
     ]);
 
-    Route::post('{adminModel}/{adminModelId}', [
+    Route::post('{adminModel}/{adminModelId}/edit', [
         'as'   => 'model.update',
         'uses' => 'AdminController@postUpdate',
     ]);
 
-    Route::delete('{adminModel}/{adminModelId}', [
+    Route::delete('{adminModel}/{adminModelId}/delete', [
         'as'   => 'model.destroy',
         'uses' => 'AdminController@postDestroy',
     ]);

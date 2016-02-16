@@ -6,11 +6,8 @@
     @endforeach
 </div>
 
-
 <div class="form-actions panel-footer">
-    <input type="submit" value="{{ trans('sleepingowladmin::core.table.save') }}" class="btn btn-primary"/>
-    <a href="{{ $backUrl }}" class="btn btn-default">{{ trans('sleepingowladmin::core.table.cancel') }}</a>
+    @include('cms::app.partials.actionButtons')
 </div>
 
 {!! Form::close() !!}
-

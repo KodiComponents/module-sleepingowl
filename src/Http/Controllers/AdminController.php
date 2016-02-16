@@ -10,7 +10,6 @@ use KodiCMS\SleepingOwlAdmin\Interfaces\FormInterface;
 use KodiCMS\SleepingOwlAdmin\Model\ModelConfiguration;
 use KodiCMS\CMS\Http\Controllers\System\BackendController;
 
-// TODO: добавить заголовки для различных действий
 class AdminController extends BackendController
 {
     /**
@@ -46,19 +45,30 @@ class AdminController extends BackendController
     public function postStore(ModelConfiguration $model)
     {
         $create = $model->fireCreate();
+
         if (is_null($create)) {
             abort(404);
         }
+
+        $nextAction = $this->request->get('next_action');
+
+        if ($nextAction == 'cancel') {
+            return redirect()->to($model->getDisplayUrl());
+        }
+
         if ($create instanceof FormInterface) {
             if ($validator = $create->validate($model)) {
-                return redirect()->back()->withErrors($validator)->withInput()->with([
-                    '_redirectBack' => Input::get('_redirectBack'),
-                ]);
+                return redirect()->back()->withErrors($validator)->withInput();
             }
+
             $create->save($model);
         }
 
-        return redirect()->to(Input::get('_redirectBack', $model->getDisplayUrl()));
+        if ($nextAction == 'continue') {
+            return redirect()->to($model->getEditUrl($create->getModelObject()->id));
+        }
+
+        return redirect()->to($model->getDisplayUrl());
     }
 
     /**
@@ -89,16 +99,25 @@ class AdminController extends BackendController
         if (is_null($edit)) {
             abort(404);
         }
+
+        $nextAction = $this->request->get('next_action');
+
+        if ($nextAction == 'cancel') {
+            return redirect()->to($model->getDisplayUrl());
+        }
+
         if ($edit instanceof FormInterface) {
             if ($validator = $edit->validate($model)) {
-                return redirect()->back()->withErrors($validator)->withInput()->with([
-                    '_redirectBack' => Input::get('_redirectBack'),
-                ]);
+                return redirect()->back()->withErrors($validator)->withInput();
             }
             $edit->save($model);
         }
 
-        return redirect()->to(Input::get('_redirectBack', $model->getDisplayUrl()));
+        if ($nextAction == 'continue') {
+            return redirect()->back();
+        }
+
+        return redirect()->to($model->getDisplayUrl());
     }
 
     /**
@@ -150,7 +169,9 @@ class AdminController extends BackendController
         $this->breadcrumbs->add(config('sleeping_owl.title'), null, true);
         $this->setTitle($model->getTitle(), $model->getDisplayUrl());
 
-        $this->template->with('content', $content);
+        $this->template
+            ->with('content', $content)
+            ->with('model', $model);
     }
 
     /**

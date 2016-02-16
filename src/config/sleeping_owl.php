@@ -7,7 +7,7 @@ return [
      */
     'title'                 => 'Sleeping Owl administrator',
     'prefix'                => backend_url_segment(),
-    'middleware'            => null,
+    'middleware'            => ['web'],
 
     /*
      * Directory to upload images to (relative to public directory)

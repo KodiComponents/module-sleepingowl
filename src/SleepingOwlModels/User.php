@@ -1,12 +1,12 @@
 <?php
 
-use KodiCMS\SleepingOwlAdmin\Display\DisplayTabbed;
 use KodiCMS\Users\Model\User;
 use KodiCMS\Users\Model\UserRole;
 use KodiCMS\SleepingOwlAdmin\Filter\Filter;
 use KodiCMS\SleepingOwlAdmin\Columns\Column;
 use KodiCMS\SleepingOwlAdmin\Filter\FilterBase;
 use KodiCMS\SleepingOwlAdmin\FormItems\FormItem;
+use KodiCMS\SleepingOwlAdmin\Display\DisplayTabbed;
 use KodiCMS\SleepingOwlAdmin\Model\ModelConfiguration;
 
 SleepingOwlModule::registerModel(User::class, function (ModelConfiguration $model) {
@@ -27,7 +27,9 @@ SleepingOwlModule::registerModel(User::class, function (ModelConfiguration $mode
                                 Column::email('email')->setLabel('E-mail')->setWidth('100px'),
                             ]), 'First Tab');
 
-                    $tabbed->appendDisplay(SleepingOwlDisplay::table(), 'Second Tab');
+                    $tabbed->appendDisplay(SleepingOwlDisplay::table()->setColumns([
+                        Column::link('username')->setLabel('Username'),
+                    ]), 'Second Tab');
                 });
 
                 return $display;
@@ -38,7 +40,7 @@ SleepingOwlModule::registerModel(User::class, function (ModelConfiguration $mode
                         [
                             FormItem::text('username', 'Username')->required(),
                             FormItem::text('email', 'E-mail')->required()->addValidationRule('email'),
-                            FormItem::date('created_at', 'Date creation'),
+                            FormItem::timestamp('created_at', 'Date creation'),
 
                             FormItem::multiselect('roles', 'Roles')->setModelForOptions(new UserRole)->setDisplay('name'),
                         ],

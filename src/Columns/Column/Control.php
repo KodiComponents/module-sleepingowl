@@ -11,7 +11,7 @@ class Control extends BaseColumn
     protected $view = 'control';
 
     /**
-     * @var
+     * @var string
      */
     protected $width = '50px';
 
@@ -46,7 +46,7 @@ class Control extends BaseColumn
      * Check if instance editable.
      * @return bool
      */
-    protected function editable()
+    protected function isEditable()
     {
         return ! $this->isTrashed() && ! is_null($this->getModelConfiguration()->fireEdit($this->getModelKey()));
     }
@@ -55,7 +55,7 @@ class Control extends BaseColumn
      * Get instance edit url.
      * @return string
      */
-    protected function editUrl()
+    protected function getEditUrl()
     {
         return $this->getModelConfiguration()->getEditUrl($this->getModelKey());
     }
@@ -64,7 +64,7 @@ class Control extends BaseColumn
      * Check if instance is deletable.
      * @return bool
      */
-    protected function deletable()
+    protected function isDeletable()
     {
         return ! $this->isTrashed() && ! is_null($this->getModelConfiguration()->fireDelete($this->getModelKey()));
     }
@@ -73,7 +73,7 @@ class Control extends BaseColumn
      * Get instance delete url.
      * @return string
      */
-    protected function deleteUrl()
+    protected function getDeleteUrl()
     {
         return $this->getModelConfiguration()->getDeleteUrl($this->getModelKey());
     }
@@ -82,7 +82,7 @@ class Control extends BaseColumn
      * Check if instance is restorable.
      * @return bool
      */
-    protected function restorable()
+    protected function isRestorable()
     {
         return $this->isTrashed() && ! is_null($this->getModelConfiguration()->fireRestore($this->getModelKey()));
     }
@@ -91,7 +91,7 @@ class Control extends BaseColumn
      * Get instance restore url.
      * @return string
      */
-    protected function restoreUrl()
+    protected function getRestoreUrl()
     {
         return $this->getModelConfiguration()->getRestoreUrl($this->getModelKey());
     }
@@ -102,12 +102,12 @@ class Control extends BaseColumn
     public function render()
     {
         return app('sleeping_owl.template')->view('column.'.$this->view, [
-            'editable'   => $this->editable(),
-            'editUrl'    => $this->editUrl(),
-            'deletable'  => $this->deletable(),
-            'deleteUrl'  => $this->deleteUrl(),
-            'restorable' => $this->restorable(),
-            'restoreUrl' => $this->restoreUrl(),
+            'editable'   => $this->isEditable(),
+            'editUrl'    => $this->getEditUrl(),
+            'deletable'  => $this->isDeletable(),
+            'deleteUrl'  => $this->getDeleteUrl(),
+            'restorable' => $this->isRestorable(),
+            'restoreUrl' => $this->getRestoreUrl(),
         ]);
     }
 }

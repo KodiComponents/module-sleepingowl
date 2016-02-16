@@ -8,8 +8,8 @@
 			</div>
 		</div>
 		<div>
-			<div class="btn btn-primary imageBrowse"><i class="fa fa-upload"></i> {{ trans('sleepingowladmin::core.image.browse') }}</div>
-			<div class="btn btn-danger imageRemove"><i class="fa fa-times"></i> {{ trans('sleepingowladmin::core.image.remove') }}</div>
+			<div class="btn btn-primary imageBrowse"><i class="fa fa-upload"></i> {{ trans('sleepingowl::core.image.browse') }}</div>
+			<div class="btn btn-danger imageRemove"><i class="fa fa-times"></i> {{ trans('sleepingowl::core.image.remove') }}</div>
 		</div>
 		<input name="{{ $name }}" class="imageValue" type="hidden" value="{{ $value }}">
 		<div class="errors">

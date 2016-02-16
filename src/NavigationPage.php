@@ -2,7 +2,7 @@
 
 namespace KodiCMS\SleepingOwlAdmin;
 
-use KodiCMS\CMS\Navigation\Page;
+use KodiCMS\Navigation\Page;
 use KodiCMS\Support\Traits\Accessor;
 use KodiCMS\SleepingOwlAdmin\Model\ModelConfiguration;
 

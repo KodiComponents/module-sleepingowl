@@ -3,10 +3,10 @@
 namespace KodiCMS\SleepingOwlAdmin;
 
 use Closure;
-use KodiCMS\CMS\Navigation\Section;
+use KodiCMS\Navigation\Navigation;
 use Illuminate\Contracts\Support\Renderable;
+use KodiCMS\Navigation\Section as NavigationSection;
 use KodiCMS\SleepingOwlAdmin\Model\ModelConfiguration;
-use KodiCMS\CMS\Navigation\Section as NavigationSection;
 use KodiCMS\SleepingOwlAdmin\Interfaces\TemplateInterface;
 use KodiCMS\SleepingOwlAdmin\Http\Controllers\AdminController;
 
@@ -123,21 +123,17 @@ class SleepingOwlAdmin
     }
 
     /**
-     * @param NavigationSection $navigation
+     * @param Navigation $navigation
      */
-    public function buildMenu(NavigationSection $navigation)
+    public function buildMenu(Navigation $navigation)
     {
-        $section = new Section([
-            'name'     => 'SleepingOwl',
-            'priority' => 999,
-            'icon' => 'cubes',
-        ]);
+        $section = $navigation->addSection('SleepingOwl', null, 999);
+
+        $section->setIcon('cubes');
 
         foreach ($this->menuItems as $item) {
             $section->addPage($item);
         }
-
-        $navigation->addPage($section);
     }
 
     /**

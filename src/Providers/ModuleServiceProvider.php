@@ -5,6 +5,7 @@ namespace KodiCMS\SleepingOwlAdmin\Providers;
 use Route;
 use Event;
 use ModulesFileSystem;
+use KodiCMS\Navigation\Navigation;
 use KodiCMS\Support\ServiceProvider;
 use KodiCMS\SleepingOwlAdmin\Filter\Filter;
 use KodiCMS\SleepingOwlAdmin\Columns\Column;
@@ -14,7 +15,6 @@ use KodiCMS\SleepingOwlAdmin\SleepingOwlAdmin;
 use KodiCMS\SleepingOwlAdmin\FormItems\FormItem;
 use KodiCMS\SleepingOwlAdmin\Facades\SleepingOwlModule;
 use KodiCMS\SleepingOwlAdmin\Display\SleepingOwlDisplay;
-use KodiCMS\CMS\Navigation\Section as NavigationSection;
 use KodiCMS\SleepingOwlAdmin\ColumnFilters\ColumnFilter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -58,7 +58,7 @@ class ModuleServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Event::listen('navigation.inited', function (NavigationSection $navigation) {
+        Event::listen('navigation.inited', function (Navigation $navigation) {
             $this->app['sleeping_owl']->buildMenu($navigation);
         });
     }
@@ -73,10 +73,10 @@ class ModuleServiceProvider extends ServiceProvider
             Route::pattern('adminModel', implode('|', $aliases));
             Route::bind('adminModel', function ($model) use ($aliases) {
                 $class = array_search($model, $aliases);
+
                 if ($class === false) {
                     throw new ModelNotFoundException;
                 }
-
                 return $this->app['sleeping_owl']->getModel($class);
             });
         }

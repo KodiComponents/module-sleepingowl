@@ -12,7 +12,7 @@
 			@endforeach
 		</div>
 		<div>
-			<div class="btn btn-primary imageBrowse"><i class="fa fa-upload"></i> {{ trans('sleepingowladmin::core.image.browseMultiple') }}</div>
+			<div class="btn btn-primary imageBrowse"><i class="fa fa-upload"></i> {{ trans('sleepingowl::core.image.browseMultiple') }}</div>
 		</div>
 		<input name="{{ $name }}" class="imageValue" type="hidden" value="{{ implode(',', $value) }}">
 		<div class="errors">

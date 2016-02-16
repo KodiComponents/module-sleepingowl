@@ -11,7 +11,7 @@ class TemplateDefault implements TemplateInterface
      */
     public function getViewNamespace()
     {
-        return 'sleepingowladmin::';
+        return 'sleepingowl::';
     }
 
     /**
