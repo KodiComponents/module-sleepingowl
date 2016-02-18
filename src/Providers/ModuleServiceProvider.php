@@ -61,6 +61,10 @@ class ModuleServiceProvider extends ServiceProvider
         Event::listen('navigation.inited', function (Navigation $navigation) {
             $this->app['sleeping_owl']->buildMenu($navigation);
         });
+
+        $this->publishes([
+            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'cms' => public_path('cms')
+        ], 'kodicms');
     }
 
     protected function registerRoutePatterns()
