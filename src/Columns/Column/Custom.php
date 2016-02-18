@@ -13,6 +13,17 @@ class Custom extends BaseColumn
     protected $callback;
 
     /**
+     * @var string
+     */
+    protected $view = 'column.custom';
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setAttribute('class', 'row-custom');
+    }
+
+    /**
      * @return Closure
      */
     public function getCallback()
@@ -50,14 +61,14 @@ class Custom extends BaseColumn
     }
 
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return array
      * @throws \Exception
      */
-    public function render()
+    public function toArray()
     {
-        return app('sleeping_owl.template')->view('column.custom', [
+        return parent::toArray() + [
             'value'  => $this->getValue($this->getModel()),
             'append' => $this->getAppend(),
-        ]);
+        ];
     }
 }

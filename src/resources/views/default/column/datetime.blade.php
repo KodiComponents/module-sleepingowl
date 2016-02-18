@@ -1,1 +1,1 @@
-<td data-order="{{ $originalValue }}" class="row-datetime">{{ $value }} {!! $append !!}</td>
+<td {!! HTML::attributes($attributes) !!}>{{ $value }} {!! $append !!}</td>

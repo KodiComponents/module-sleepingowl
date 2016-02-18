@@ -1,1 +1,1 @@
-<td class="row-string">{{ $value }} {!! $append !!}</td>
+<td {!! HTML::attributes($attributes) !!}>{{ $value }} {!! $append !!}</td>

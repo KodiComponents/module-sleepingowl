@@ -2,6 +2,7 @@
 
 namespace KodiCMS\SleepingOwlAdmin\Form;
 
+use Illuminate\Support\Collection;
 use URL;
 use Input;
 use Validator;
@@ -72,8 +73,10 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
         if ($this->initialized) {
             return;
         }
+
         $this->initialized = true;
         $this->repository = new BaseRepository($this->class);
+
         $this->setModelObject(app($this->class));
         $this->initializeItems();
     }
@@ -139,7 +142,7 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
     }
 
     /**
-     * @return FormItemInterface[]
+     * @return Collection[]
      */
     public function getItems()
     {
@@ -156,7 +159,8 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
         if (! is_array($items)) {
             $items = func_get_args();
         }
-        $this->items = $items;
+
+        $this->items = collect($items);
 
         return $this;
     }
@@ -177,8 +181,8 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
     public function setModelObject(Model $modelObject)
     {
         $this->modelObject = $modelObject;
-        $items = $this->getItems();
-        array_walk_recursive($items, function ($item) {
+
+        $this->getItems()->each(function($item) {
             if ($item instanceof FormItemInterface) {
                 $item->setModel($this->modelObject);
             }
@@ -219,12 +223,13 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
         if ($this->getModel() != $model) {
             return;
         }
-        $items = $this->getItems();
-        array_walk_recursive($items, function ($item) {
+
+        $this->getItems()->each(function($item) {
             if ($item instanceof FormItemInterface) {
                 $item->save();
             }
         });
+
         $this->getModelObject()->save();
     }
 
@@ -238,18 +243,21 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
         if ($this->getModel() != $model) {
             return;
         }
+
         $rules = [];
-        $items = $this->getItems();
-        array_walk_recursive($items, function ($item) use (&$rules) {
+
+        $this->getItems()->each(function($item) use (&$rules) {
             if ($item instanceof FormItemInterface) {
                 $rules += $item->getValidationRules();
             }
         });
+
         $data = Input::all();
         $verifier = app('validation.presence');
         $verifier->setConnection($this->getModelObject()->getConnectionName());
         $validator = Validator::make($data, $rules);
         $validator->setPresenceVerifier($verifier);
+
         if ($validator->fails()) {
             return $validator;
         }
@@ -262,7 +270,7 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
      */
     public function render()
     {
-        return app('sleeping_owl.template')->view('form.'.$this->view, $this->getParams());
+        return app('sleeping_owl.template')->view('form.'.$this->getView(), $this->getParams());
     }
 
     /**
@@ -299,7 +307,8 @@ class FormDefault implements Renderable, DisplayInterface, FormInterface
     protected function initializeItems()
     {
         $items = $this->getItems();
-        array_walk_recursive($items, function ($item) {
+
+        $this->getItems()->each(function($item) {
             if ($item instanceof FormItemInterface) {
                 $item->initialize();
             }

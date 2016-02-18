@@ -58,6 +58,7 @@ class DisplayDatatables extends DisplayTable
         if (! is_array($order)) {
             $order = func_get_args();
         }
+
         $this->order = $order;
 
         return $this;
@@ -81,6 +82,7 @@ class DisplayDatatables extends DisplayTable
         if (! is_array($columnFilters)) {
             $columnFilters = func_get_args();
         }
+
         $this->columnFilters = $columnFilters;
 
         return $this;
@@ -104,6 +106,7 @@ class DisplayDatatables extends DisplayTable
         if (! is_array($attributes)) {
             $attributes = func_get_args();
         }
+
         $this->attributes = $attributes;
 
         return $this;

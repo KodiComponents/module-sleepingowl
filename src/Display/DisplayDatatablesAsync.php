@@ -2,6 +2,8 @@
 
 namespace KodiCMS\SleepingOwlAdmin\Display;
 
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 use Input;
 use Route;
 use KodiCMS\SleepingOwlAdmin\Columns\Column\String;
@@ -15,8 +17,7 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
      */
     public static function registerRoutes()
     {
-        Route::get('{adminModel}/async/{adminDisplayName?}', [
-            'as' => 'admin.model.async',
+        Route::get('{adminModel}/async/{adminDisplayName?}', ['as' => 'admin.model.async',
             function ($model, $name = null) {
                 $display = $model->display();
                 if ($display instanceof DisplayTabbed) {
@@ -61,6 +62,12 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
      */
     protected $distinct;
 
+    /**
+     * DisplayDatatablesAsync constructor.
+     *
+     * @param string|null $name
+     * @param string|null $distinct
+     */
     public function __construct($name = null, $distinct = null)
     {
         $this->setName($name);
@@ -130,15 +137,20 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
     {
         $query = $this->getRepository()->getQuery();
         $totalCount = $query->count();
+        $filteredCount = 0;
+
         if (! is_null($this->distinct)) {
             $filteredCount = $query->distinct()->count($this->getDistinct());
         }
+
         $this->modifyQuery($query);
         $this->applySearch($query);
         $this->applyColumnSearch($query);
+
         if (is_null($this->distinct)) {
             $filteredCount = $query->count();
         }
+
         $this->applyOrders($query);
         $this->applyOffset($query);
         $collection = $query->get();
@@ -155,9 +167,11 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
     {
         $offset = Input::get('start', 0);
         $limit = Input::get('length', 10);
+
         if ($limit == -1) {
             return;
         }
+
         $query->offset($offset)->limit($limit);
     }
 
@@ -169,10 +183,12 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
     protected function applyOrders($query)
     {
         $orders = Input::get('order', []);
+
         foreach ($orders as $order) {
             $columnIndex = $order['column'];
             $orderDirection = $order['dir'];
             $column = $this->allColumns()[$columnIndex];
+
             if ($column instanceof NamedColumn && $column->isOrderable()) {
                 $name = $column->name();
                 $query->orderBy($name, $orderDirection);
@@ -183,14 +199,15 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
     /**
      * Apply search to the query.
      *
-     * @param $query
+     * @param Builder $query
      */
-    protected function applySearch($query)
+    protected function applySearch(Builder $query)
     {
         $search = Input::get('search.value');
         if (is_null($search)) {
             return;
         }
+
         $query->where(function ($query) use ($search) {
             $columns = $this->columns();
             foreach ($columns as $column) {
@@ -204,14 +221,20 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
         });
     }
 
-    protected function applyColumnSearch($query)
+    /**
+     * @param Builder $query
+     */
+    protected function applyColumnSearch(Builder $query)
     {
         $queryColumns = Input::get('columns', []);
+
         foreach ($queryColumns as $index => $queryColumn) {
+
             $search = array_get($queryColumn, 'search.value');
             $fullSearch = array_get($queryColumn, 'search');
             $column = array_get($this->columns(), $index);
             $columnFilter = array_get($this->columnFilters(), $index);
+
             if (! is_null($columnFilter)) {
                 $columnFilter->apply($this->repository, $column, $query, $search, $fullSearch);
             }
@@ -221,26 +244,29 @@ class DisplayDatatablesAsync extends DisplayDatatables implements WithRoutesInte
     /**
      * Convert collection to the datatables structure.
      *
-     * @param $collection
-     * @param $totalCount
-     * @param $filteredCount
+     * @param array|Collection $collection
+     * @param int $totalCount
+     * @param int $filteredCount
      *
      * @return array
      */
-    protected function prepareDatatablesStructure($collection, $totalCount, $filteredCount)
+    protected function prepareDatatablesStructure(Collection $collection, $totalCount, $filteredCount)
     {
         $columns = $this->allColumns();
+
         $result = [];
         $result['draw'] = Input::get('draw', 0);
         $result['recordsTotal'] = $totalCount;
         $result['recordsFiltered'] = $filteredCount;
         $result['data'] = [];
+
         foreach ($collection as $instance) {
             $_row = [];
             foreach ($columns as $column) {
                 $column->setInstance($instance);
                 $_row[] = (string) $column;
             }
+
             $result['data'][] = $_row;
         }
 

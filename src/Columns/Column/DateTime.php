@@ -12,6 +12,12 @@ class DateTime extends NamedColumn
      */
     protected $format;
 
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this->setAttribute('class', 'row-control');
+    }
+
     /**
      * @return string
      */
@@ -35,21 +41,25 @@ class DateTime extends NamedColumn
     /**
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function render()
+    public function toArray()
     {
-        $value = $this->getModelValue();
+        $value         = $this->getModelValue();
         $originalValue = $value;
+
         if (! is_null($value)) {
             if (! $value instanceof Carbon) {
                 $value = Carbon::parse($value);
             }
+
             $value = $value->format($this->getFormat());
         }
 
-        return app('sleeping_owl.template')->view('column.datetime', [
+        $this->setAttribute('data-order', $originalValue);
+
+        return parent::toArray() + [
             'value'         => $value,
             'originalValue' => $originalValue,
             'append'        => $this->getAppend(),
-        ]);
+        ];
     }
 }

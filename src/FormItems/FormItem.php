@@ -25,6 +25,7 @@ use KodiCMS\SleepingOwlAdmin\AliasBinder;
  * @method static \KodiCMS\SleepingOwlAdmin\FormItems\CKEditor ckeditor($name, $label = null)
  * @method static \KodiCMS\SleepingOwlAdmin\FormItems\Textarea textarea($name, $label = null)
  * @method static \KodiCMS\SleepingOwlAdmin\FormItems\Radio radio($name, $label = null)
+ * @method static \KodiCMS\SleepingOwlAdmin\FormItems\Wysiwyg wysiwyg($name, $label = null)
  */
 class FormItem extends AliasBinder
 {

@@ -207,6 +207,7 @@ class DisplayTree implements Renderable, DisplayInterface, WithRoutesInterface
         if (! is_array($with)) {
             $with = func_get_args();
         }
+
         $this->with = $with;
 
         return $this;

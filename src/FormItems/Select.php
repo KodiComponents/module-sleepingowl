@@ -9,11 +9,6 @@ use KodiCMS\SleepingOwlAdmin\Repository\BaseRepository;
 class Select extends NamedFormItem
 {
     /**
-     * @var string
-     */
-    protected $view = 'select';
-
-    /**
      * @var Model
      */
     protected $modelForOptions;
@@ -81,6 +76,7 @@ class Select extends NamedFormItem
         if (! is_null($this->getModelForOptions()) && ! is_null($this->getDisplay())) {
             $this->loadOptions();
         }
+
         $options = $this->options;
         asort($options);
 

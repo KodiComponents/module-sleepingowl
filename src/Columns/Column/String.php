@@ -5,13 +5,24 @@ namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 class String extends NamedColumn
 {
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * String constructor.
+     *
+     * @param $name
      */
-    public function render()
+    public function __construct($name)
     {
-        return app('sleeping_owl.template')->view('column.string', [
+        parent::__construct($name);
+        $this->setAttribute('class', 'row-string');
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return parent::toArray() + [
             'value'  => $this->getModelValue(),
             'append' => $this->getAppend(),
-        ]);
+        ];
     }
 }

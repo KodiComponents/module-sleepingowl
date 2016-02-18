@@ -151,6 +151,7 @@ class DisplayTable implements Renderable, DisplayInterface
         if (! is_array($with)) {
             $with = func_get_args();
         }
+
         $this->with = $with;
 
         return $this;
@@ -182,6 +183,7 @@ class DisplayTable implements Renderable, DisplayInterface
         if (! is_array($filters)) {
             $filters = func_get_args();
         }
+
         $this->filters = $filters;
 
         return $this;
@@ -217,6 +219,7 @@ class DisplayTable implements Renderable, DisplayInterface
         if (! is_array($scopes)) {
             $scopes = func_get_args();
         }
+
         $this->scopes = $scopes;
 
         return $this;
@@ -252,6 +255,7 @@ class DisplayTable implements Renderable, DisplayInterface
         if (! is_array($activeFilters)) {
             $activeFilters = func_get_args();
         }
+
         $this->activeFilters = $activeFilters;
 
         return $this;
@@ -343,6 +347,7 @@ class DisplayTable implements Renderable, DisplayInterface
         if (! is_array($actions)) {
             $actions = func_get_args();
         }
+
         $this->actions = $actions;
 
         return $this;
@@ -420,20 +425,24 @@ class DisplayTable implements Renderable, DisplayInterface
         $action = Input::get('_action');
         $id = Input::get('_id');
         $ids = Input::get('_ids');
+
         if (! is_null($action) && (! is_null($id) || ! is_null($ids))) {
             $columns = array_merge($this->getColumns(), $this->getActions());
             foreach ($columns as $column) {
                 if (! $column instanceof NamedColumnInterface) {
                     continue;
                 }
+
                 if ($column->getName() == $action) {
                     $param = null;
+
                     if (! is_null($id)) {
                         $param = $this->getRepository()->find($id);
                     } else {
                         $ids = explode(',', $ids);
                         $param = $this->getRepository()->findMany($ids);
                     }
+
                     $column->call($param);
                 }
             }
@@ -443,6 +452,7 @@ class DisplayTable implements Renderable, DisplayInterface
     protected function initializeFilters()
     {
         $this->initializeAction();
+
         foreach ($this->getFilters() as $filter) {
             $filter->initialize();
             if ($filter->isActive()) {
@@ -465,6 +475,7 @@ class DisplayTable implements Renderable, DisplayInterface
                 ], $scope);
             }
         }
+
         $this->apply($query);
         foreach ($this->getActiveFilters() as $filter) {
             $filter->apply($query);

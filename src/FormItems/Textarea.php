@@ -5,11 +5,6 @@ namespace KodiCMS\SleepingOwlAdmin\FormItems;
 class Textarea extends NamedFormItem
 {
     /**
-     * @var string
-     */
-    protected $view = 'textarea';
-
-    /**
      * @var int
      */
     protected $rows = 10;
@@ -33,6 +28,7 @@ class Textarea extends NamedFormItem
         if ($rows < 1) {
             $rows = 1;
         }
+
         $this->rows = $rows;
 
         return $this;

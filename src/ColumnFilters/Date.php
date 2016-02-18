@@ -120,9 +120,11 @@ class Date extends Text
     public function setWidth($width)
     {
         intval($width);
+
         if ($width < 0) {
             $width = 0;
         }
+
         $this->width = (int) $width;
 
         return $this;
@@ -169,6 +171,7 @@ class Date extends Text
         if (empty($search)) {
             return;
         }
+
         try {
             $time = Carbon::createFromFormat($this->getFormat(), $search);
         } catch (Exception $e) {
@@ -178,6 +181,7 @@ class Date extends Text
                 return;
             }
         }
+
         $time = $time->format($this->getSearchFormat());
         $name = $column->getName();
         if ($repository->hasColumn($name)) {

@@ -5,13 +5,22 @@ namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 class Lists extends NamedColumn
 {
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @param $name
      */
-    public function render()
+    public function __construct($name)
     {
-        return app('sleeping_owl.template')->view('column.lists', [
+        parent::__construct($name);
+        $this->setAttribute('class', 'row-lists');
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return parent::toArray() + [
             'values' => $this->getModelValue(),
             'append' => $this->getAppend(),
-        ]);
+        ];
     }
 }

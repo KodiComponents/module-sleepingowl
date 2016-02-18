@@ -5,10 +5,9 @@ namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 class Control extends BaseColumn
 {
     /**
-     * Column view.
      * @var string
      */
-    protected $view = 'control';
+    protected $view = 'column.control';
 
     /**
      * @var string
@@ -19,6 +18,8 @@ class Control extends BaseColumn
     {
         parent::__construct();
         $this->setOrderable(false);
+
+        $this->setAttribute('class', 'row-control');
     }
 
     /**
@@ -31,6 +32,7 @@ class Control extends BaseColumn
 
     /**
      * Check if instance supports soft-deletes and trashed.
+     *
      * @return bool
      */
     protected function isTrashed()
@@ -44,6 +46,7 @@ class Control extends BaseColumn
 
     /**
      * Check if instance editable.
+     *
      * @return bool
      */
     protected function isEditable()
@@ -62,6 +65,7 @@ class Control extends BaseColumn
 
     /**
      * Check if instance is deletable.
+     *
      * @return bool
      */
     protected function isDeletable()
@@ -71,6 +75,7 @@ class Control extends BaseColumn
 
     /**
      * Get instance delete url.
+     *
      * @return string
      */
     protected function getDeleteUrl()
@@ -80,6 +85,7 @@ class Control extends BaseColumn
 
     /**
      * Check if instance is restorable.
+     *
      * @return bool
      */
     protected function isRestorable()
@@ -89,6 +95,7 @@ class Control extends BaseColumn
 
     /**
      * Get instance restore url.
+     *
      * @return string
      */
     protected function getRestoreUrl()
@@ -97,17 +104,17 @@ class Control extends BaseColumn
     }
 
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return array
      */
-    public function render()
+    public function toArray()
     {
-        return app('sleeping_owl.template')->view('column.'.$this->view, [
+        return parent::toArray() + [
             'editable'   => $this->isEditable(),
             'editUrl'    => $this->getEditUrl(),
             'deletable'  => $this->isDeletable(),
             'deleteUrl'  => $this->getDeleteUrl(),
             'restorable' => $this->isRestorable(),
             'restoreUrl' => $this->getRestoreUrl(),
-        ]);
+        ];
     }
 }

@@ -19,13 +19,13 @@
     <table class="table table-primary table-striped table-hover">
         <colgroup>
             @foreach ($columns as $column)
-                <col width="{!! $column->getWidth() !!}" />
+            <col width="{!! $column->getWidth() !!}" />
             @endforeach
         </colgroup>
         <thead>
             <tr>
                 @foreach ($columns as $column)
-                    {!! $column->getHeader() !!}
+                {!! $column->getHeader()->render() !!}
                 @endforeach
             </tr>
         </thead>
@@ -34,7 +34,7 @@
             <tr>
                 @foreach ($columns as $column)
                 <?php $column->setModel($model); ?>
-                {!! $column !!}
+                {!! $column->render() !!}
                 @endforeach
             </tr>
         @endforeach

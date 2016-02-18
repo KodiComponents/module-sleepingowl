@@ -21,6 +21,7 @@ class Order extends BaseColumn implements WithRoutesInterface
                 return back();
             },
         ]);
+
         Route::post('{adminModel}/{adminModelId}/down', [
             'as' => 'admin.model.move-down',
             function ($model, $id) {
@@ -30,6 +31,12 @@ class Order extends BaseColumn implements WithRoutesInterface
                 return back();
             },
         ]);
+    }
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setAttribute('class', 'row-order');
     }
 
     /**
@@ -93,15 +100,15 @@ class Order extends BaseColumn implements WithRoutesInterface
     }
 
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return array
      */
-    public function render()
+    public function toArray()
     {
-        return app('sleeping_owl.template')->view('column.order', [
+        return parent::toArray() + [
             'movableUp'   => $this->movableUp(),
             'moveUpUrl'   => $this->moveUpUrl(),
             'movableDown' => $this->movableDown(),
             'moveDownUrl' => $this->moveDownUrl(),
-        ]);
+        ];
     }
 }

@@ -7,8 +7,6 @@ use Input;
 
 class Images extends Image
 {
-    protected $view = 'images';
-
     public function initialize()
     {
         Meta::loadPackage(get_class());
@@ -18,11 +16,13 @@ class Images extends Image
     {
         $name = $this->getName();
         $value = Input::get($name, '');
+
         if (! empty($value)) {
             $value = explode(',', $value);
         } else {
             $value = [];
         }
+
         Input::merge([$name => $value]);
         parent::save();
     }
@@ -36,6 +36,7 @@ class Images extends Image
         if (is_null($value)) {
             $value = [];
         }
+
         if (is_string($value)) {
             $value = preg_split('/,/', $value, -1, PREG_SPLIT_NO_EMPTY);
         }

@@ -1,1 +1,1 @@
-<td class="row-custom">{!! $value !!} {!! $append !!}</td>
+<td {!! HTML::attributes($attributes) !!}>{!! $value !!} {!! $append !!}</td>

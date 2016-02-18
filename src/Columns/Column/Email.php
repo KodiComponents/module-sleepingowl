@@ -4,14 +4,20 @@ namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 
 class Email extends NamedColumn
 {
-    /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function render()
+    public function __construct($name)
     {
-        return app('sleeping_owl.template')->view('column.email', [
+        parent::__construct($name);
+        $this->setAttribute('class', 'row-email');
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return parent::toArray() + [
             'value'  => $this->getModelValue(),
             'append' => $this->getAppend(),
-        ]);
+        ];
     }
 }

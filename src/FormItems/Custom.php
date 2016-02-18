@@ -71,6 +71,7 @@ class Custom extends BaseFormItem
     public function save()
     {
         $callback = $this->getCallback();
+
         if (is_callable($callback)) {
             call_user_func($callback, $this->getModel());
         }

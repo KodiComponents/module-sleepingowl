@@ -13,22 +13,17 @@ class Image extends NamedFormItem implements WithRoutesInterface
     /**
      * @var string
      */
-    protected $view = 'image';
-
-    /**
-     * @var string
-     */
     protected static $route = 'uploadImage';
 
     public static function registerRoutes()
     {
-        Route::post('formitems/image/'.static::$route, [
-            'as' => 'admin.formitems.image.'.static::$route,
+        Route::post('formitems/image/'.static::$route, ['as' => 'admin.formitems.image.'.static::$route,
             function () {
                 $validator = Validator::make(Input::all(), static::uploadValidationRules());
                 if ($validator->fails()) {
                     return Response::make($validator->errors()->get('file'), 400);
                 }
+
                 $file = Input::file('file');
                 $filename = md5(time().$file->getClientOriginalName()).'.'.$file->getClientOriginalExtension();
                 $path = config('sleeping_owl.imagesUploadDirectory');

@@ -110,6 +110,7 @@ class Range extends BaseColumnFilter
         if (! empty($from)) {
             $this->getFrom()->apply($repository, $column, $query, $from, $fullSearch, '>=');
         }
+
         if (! empty($to)) {
             $this->getTo()->apply($repository, $column, $query, $to, $fullSearch, '<=');
         }

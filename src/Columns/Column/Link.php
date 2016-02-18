@@ -2,22 +2,48 @@
 
 namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 
-use KodiCMS\Support\Traits\HtmlAttributes;
-
 class Link extends NamedColumn
 {
-    use HtmlAttributes;
+    /**
+     * @var array
+     */
+    protected $linkAttributes = [];
 
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @param $name
      */
-    public function render()
+    public function __construct($name)
     {
-        return app('sleeping_owl.template')->view('column.link', [
-            'value'      => $this->getModelValue(),
-            'link'       => $this->getModelConfiguration()->getEditUrl($this->getModel()->getKey()),
-            'append'     => $this->getAppend(),
-            'attributes' => $this->getAttributes(),
-        ]);
+        parent::__construct($name);
+        $this->setAttribute('class', 'row-link');
+    }
+
+    /**
+     * @return array
+     */
+    public function getLinkAttributes()
+    {
+        return $this->linkAttributes;
+    }
+
+    /**
+     * @param array $linkAttributes
+     */
+    public function setLinkAttributes(array $linkAttributes)
+    {
+        $this->linkAttributes = $linkAttributes;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return parent::toArray() + [
+            'value'          => $this->getModelValue(),
+            'link'           => $this->getModelConfiguration()->getEditUrl($this->getModel()->getKey()),
+            'append'         => $this->getAppend(),
+            'linkAttributes' => $this->getLinkAttributes()
+        ];
     }
 }

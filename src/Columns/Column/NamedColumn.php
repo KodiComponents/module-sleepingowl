@@ -63,11 +63,13 @@ abstract class NamedColumn extends BaseColumn implements NamedColumnInterface
     {
         $parts = explode('.', $name);
         $part = array_shift($parts);
+
         if ($instance instanceof Collection) {
             $instance = $instance->lists($part);
         } else {
             $instance = $instance->{$part};
         }
+
         if (! empty($parts) && ! is_null($instance)) {
             return $this->getValueFromObject($instance, implode('.', $parts));
         }

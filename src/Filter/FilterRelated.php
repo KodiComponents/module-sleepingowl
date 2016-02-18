@@ -57,6 +57,7 @@ class FilterRelated extends FilterBase
         if (! class_exists($model)) {
             throw new Exception("Class model [$model] not found");
         }
+
         $this->model = $model;
 
         return $this;
@@ -82,15 +83,16 @@ class FilterRelated extends FilterBase
     protected function getDisplayField()
     {
         $model = $this->getModel();
+
         if (is_null($model)) {
             throw new Exception('Specify model for filter: '.$this->getName());
         }
+
         try {
             $modelObject = app($model)->findOrFail($this->getValue());
 
             return $modelObject->{$this->getDisplay()};
-        } catch (ModelNotFoundException $e) {
-        }
+        } catch (ModelNotFoundException $e) {}
 
         return;
     }

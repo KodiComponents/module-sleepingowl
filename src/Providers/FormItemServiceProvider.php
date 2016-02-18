@@ -28,5 +28,6 @@ class FormItemServiceProvider extends ServiceProvider
         FormItem::register('images', \KodiCMS\SleepingOwlAdmin\FormItems\Images::class);
         FormItem::register('file', \KodiCMS\SleepingOwlAdmin\FormItems\File::class);
         FormItem::register('radio', \KodiCMS\SleepingOwlAdmin\FormItems\Radio::class);
+        FormItem::register('wysiwyg', \KodiCMS\SleepingOwlAdmin\FormItems\Wysiwyg::class);
     }
 }

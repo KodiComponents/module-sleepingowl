@@ -7,11 +7,6 @@ class File extends Image
     /**
      * @var string
      */
-    protected $view = 'file';
-
-    /**
-     * @var string
-     */
     protected static $route = 'uploadFile';
 
     /**

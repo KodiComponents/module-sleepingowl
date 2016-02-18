@@ -4,24 +4,26 @@ namespace KodiCMS\SleepingOwlAdmin\FormItems;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use KodiCMS\SleepingOwlAdmin\Interfaces\FormItemInterface;
 
 class Columns extends BaseFormItem
 {
     /**
-     * @var string
+     * @var Collection
      */
-    protected $view = 'columns';
+    protected $columns;
 
-    /**
-     * @var array
-     */
-    protected $columns = [];
+    public function __construct()
+    {
+        $this->columns = new Collection();
+    }
 
     public function initialize()
     {
         parent::initialize();
-        $this->all(function ($item) {
+
+        $this->applyCallbackToItems(function (FormItemInterface $item) {
             $item->initialize();
         });
     }
@@ -35,13 +37,22 @@ class Columns extends BaseFormItem
     }
 
     /**
-     * @param array $columns
+     * @param Collection $columns
      *
      * @return $this
      */
-    public function setColumns(array $columns)
+    public function setColumns(Collection $columns)
     {
-        $this->columns = $columns;
+        $this->columns = collect($columns);
+
+        return $this;
+    }
+
+    public function addColumn(Closure $callback)
+    {
+        $this->columns->push(
+            new Collection($callback())
+        );
 
         return $this;
     }
@@ -54,7 +65,8 @@ class Columns extends BaseFormItem
     public function setModel(Model $model)
     {
         parent::setModel($model);
-        $this->all(function ($item) use ($model) {
+
+        $this->applyCallbackToItems(function (FormItemInterface $item) use ($model) {
             $item->setModel($model);
         });
 
@@ -91,7 +103,8 @@ class Columns extends BaseFormItem
     public function save()
     {
         parent::save();
-        $this->all(function ($item) {
+
+        $this->applyCallbackToItems(function (FormItemInterface $item) {
             $item->save();
         });
     }
@@ -99,7 +112,7 @@ class Columns extends BaseFormItem
     /**
      * @param Closure $callback
      */
-    protected function all(Closure $callback)
+    protected function applyCallbackToItems(Closure $callback)
     {
         foreach ($this->getColumns() as $columnItems) {
             foreach ($columnItems as $item) {

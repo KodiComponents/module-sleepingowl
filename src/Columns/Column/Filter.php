@@ -16,6 +16,12 @@ class Filter extends NamedColumn
      */
     protected $field;
 
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this->setAttribute('class', 'row-filter');
+    }
+
     /**
      * @return string
      */
@@ -81,14 +87,15 @@ class Filter extends NamedColumn
     }
 
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return array
      */
-    public function render()
+    public function toArray()
     {
-        return app('sleeping_owl.template')->view('column.filter', [
-            'isSelf' => $this->isSelf(),
-            'url'    => $this->getUrl(),
-            'value'  => $this->getValue($this->getModel(), $this->getField()),
-        ]);
+        return parent::toArray() + [
+            'icon'  => $this->isSelf() ? 'fa-filter' : 'fa-arrow-circle-o-right',
+            'title' => $this->isSelf() ? trans('sleepingowl::core.table.filter') : trans('sleepingowl::core.table.filter-goto'),
+            'url'   => $this->getUrl(),
+            'value' => $this->getValue($this->getModel(), $this->getField()),
+        ];
     }
 }

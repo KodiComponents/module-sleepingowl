@@ -2,22 +2,33 @@
 
 namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 
+use Form;
+
 class Checkbox extends BaseColumn
 {
+    /**
+     * @var string
+     */
+    protected $view = 'column.checkbox';
+
     public function __construct()
     {
         parent::__construct();
-        $this->setLabel('<input type="checkbox" class="adminCheckboxAll"/>');
+        $this->setLabel(
+            Form::checkbox(null, 1, ['class' => 'adminCheckboxAll']
+        ));
+
         $this->setOrderable(false);
+        $this->setAttribute('class', 'row-checkbox');
     }
 
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return array
      */
-    public function render()
+    public function toArray()
     {
-        return app('sleeping_owl.template')->view('column.checkbox', [
+        return parent::toArray() + [
             'value' => $this->getModel()->getKey(),
-        ]);
+        ];
     }
 }

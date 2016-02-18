@@ -19,12 +19,14 @@ SleepingOwlModule::registerModel(User::class, function (ModelConfiguration $mode
                     $tabbed->appendDisplay(
                         SleepingOwlDisplay::table()
                             ->setFilters([
-                                Filter::field('username')->setOperator(FilterBase::BEGINS_WITH),
+                                Filter::field('name')
+                                    ->setOperator(FilterBase::BEGINS_WITH)
+                                    ->setValue('ad')
                             ])
                             ->setColumns([
-                                Column::link('username')->setLabel('Username'),
-                                Column::lists('roles.name')->setLabel('Roles'),
-                                Column::email('email')->setLabel('E-mail')->setWidth('100px'),
+                                Column::link('name')->setLabel('name'),
+                                Column::lists('roles.name')->setLabel('Roles')->setWidth('300px'),
+                                Column::email('email')->setLabel('E-mail')->setWidth('200px'),
                             ]), 'First Tab');
 
                     $tabbed->appendDisplay(SleepingOwlDisplay::table()->setColumns([
@@ -36,15 +38,14 @@ SleepingOwlModule::registerModel(User::class, function (ModelConfiguration $mode
             })->onCreateAndEdit(function () {
                 $form = SleepingOwlForm::form();
                 $form->setItems(
-                    FormItem::columns()->setColumns([
-                        [
-                            FormItem::text('username', 'Username')->required(),
+                    FormItem::columns()->addColumn(function() {
+                        return [
+                            FormItem::wysiwyg('name', 'Username', 'ace')->required(),
                             FormItem::text('email', 'E-mail')->required()->addValidationRule('email'),
                             FormItem::timestamp('created_at', 'Date creation'),
-
                             FormItem::multiselect('roles', 'Roles')->setModelForOptions(new UserRole)->setDisplay('name'),
-                        ],
-                    ])
+                        ];
+                    })
                 );
 
                 return $form;

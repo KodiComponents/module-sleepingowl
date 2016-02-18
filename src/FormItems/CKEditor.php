@@ -12,20 +12,27 @@ use KodiCMS\SleepingOwlAdmin\Interfaces\WithRoutesInterface;
 
 class CKEditor extends NamedFormItem implements WithRoutesInterface
 {
+    /**
+     * @var array
+     */
+    protected static $allowedExtensions = [
+        'bmp',
+        'gif',
+        'jpg',
+        'jpeg',
+        'png',
+    ];
+
     public static function registerRoutes()
     {
         Route::get('assets/images/all', function () {
             return static::getAll();
         });
+
         Route::post('assets/images/upload', function () {
             return static::postUpload();
         });
     }
-
-    /**
-     * @var string
-     */
-    protected $view = 'ckeditor';
 
     /**
      * @return array
@@ -75,13 +82,7 @@ class CKEditor extends NamedFormItem implements WithRoutesInterface
     {
         $path = config('sleeping_owl.imagesUploadDirectory').'/';
         $upload_dir = public_path($path);
-        $allowedExtensions = [
-            'bmp',
-            'gif',
-            'jpg',
-            'jpeg',
-            'png',
-        ];
+
         $maxsize = 2000;
         $maxwidth = 9000;
         $maxheight = 8000;
@@ -92,21 +93,28 @@ class CKEditor extends NamedFormItem implements WithRoutesInterface
         $extension = null;
         $width = 0;
         $height = 0;
+
         try {
             if (is_null($file)) {
                 $errors[] = trans('sleepingowl::core.ckeditor.upload.error.common');
                 throw new Exception;
             }
+
             $extension = $file->guessClientExtension();
-            if (! in_array($extension, $allowedExtensions)) {
+
+            if (! in_array($extension, static::allowedExtensions)) {
                 $errors[] = trans('sleepingowl::core.ckeditor.upload.error.wrong_extension',
                     ['file' => $file->getClientOriginalName()]);
                 throw new Exception;
             }
+
             if ($file->getSize() > $maxsize * 1000) {
+
                 $errors[] = trans('sleepingowl::core.ckeditor.upload.error.filesize_limit', ['size' => $maxsize]);
             }
+
             list($width, $height) = getimagesize($file);
+
             if ($width > $maxwidth || $height > $maxheight) {
                 $errors[] = trans('sleepingowl::core.ckeditor.upload.error.imagesize_max_limit', [
                     'width'     => $width,
@@ -115,6 +123,7 @@ class CKEditor extends NamedFormItem implements WithRoutesInterface
                     'maxheight' => $maxheight,
                 ]);
             }
+
             if ($width < $minwidth || $height < $minheight) {
                 $errors[] = trans('sleepingowl::core.ckeditor.upload.error.imagesize_min_limit', [
                     'width'     => $width,
@@ -123,20 +132,23 @@ class CKEditor extends NamedFormItem implements WithRoutesInterface
                     'minheight' => $minheight,
                 ]);
             }
-        } catch (Exception $e) {
-        }
+        } catch (Exception $e) {}
+
         if (! empty($errors)) {
             return '<script>alert("'.implode('\\n', $errors).'");</script>';
         }
+
         $finalFilename = $file->getClientOriginalName();
         $file = $file->move($upload_dir, $finalFilename);
         $CKEditorFuncNum = Input::get('CKEditorFuncNum');
         $url = asset($path.$finalFilename);
+
         $message = trans('sleepingowl::core.ckeditor.upload.success', [
             'size'   => number_format($file->getSize() / 1024, 3, '.', ''),
             'width'  => $width,
             'height' => $height,
         ]);
+
         $result = "window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$message')";
 
         return '<script>'.$result.';</script>';

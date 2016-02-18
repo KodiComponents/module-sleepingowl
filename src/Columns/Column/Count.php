@@ -5,13 +5,24 @@ namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 class Count extends NamedColumn
 {
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @var string
      */
-    public function render()
+    protected $view = 'column.count';
+
+    public function __construct($name)
     {
-        return app('sleeping_owl.template')->view('column.count', [
+        parent::__construct($name);
+        $this->setAttribute('class', 'row-count');
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return parent::toArray() + [
             'value'  => count($this->getModelValue()),
             'append' => $this->getAppend(),
-        ]);
+        ];
     }
 }

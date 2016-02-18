@@ -44,12 +44,19 @@ class Action extends NamedColumn implements ColumnActionInterface
     protected $url;
 
     /**
+     * @var string
+     */
+    protected $view = 'column.action';
+
+    /**
      * @param string $name
      */
     public function __construct($name)
     {
         parent::__construct($name);
         $this->setOrderable(false);
+
+        $this->setAttribute('class', 'row-action');
     }
 
     /**
@@ -148,19 +155,15 @@ class Action extends NamedColumn implements ColumnActionInterface
         return $this;
     }
 
-    /**
-     * Render action button.
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function render()
+    public function toArray()
     {
-        return app('sleeping_owl.template')->view('column.action', [
+        return parent::toArray() + [
             'icon'   => $this->icon(),
             'style'  => $this->style(),
             'value'  => $this->value(),
             'target' => $this->target(),
             'url'    => $this->url(),
-        ]);
+        ];
     }
 
     /**
@@ -172,6 +175,7 @@ class Action extends NamedColumn implements ColumnActionInterface
             if (is_callable($this->url)) {
                 return call_user_func($this->url, $this->getModel());
             }
+
             if (! is_null($this->getModel())) {
                 return strtr($this->url, [':id' => $this->getModel()->getKey()]);
             }

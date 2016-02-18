@@ -35,6 +35,11 @@ abstract class BaseFormItem implements Renderable, FormItemInterface, Arrayable
      */
     public function getView()
     {
+        if (is_null($this->view)) {
+            $reflect    = new \ReflectionClass($this);
+            $this->view = strtolower($reflect->getShortName());
+        }
+
         return $this->view;
     }
 

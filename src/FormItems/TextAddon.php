@@ -7,11 +7,6 @@ class TextAddon extends NamedFormItem
     /**
      * @var string
      */
-    protected $view = 'textaddon';
-
-    /**
-     * @var string
-     */
     protected $placement = 'before';
 
     /**

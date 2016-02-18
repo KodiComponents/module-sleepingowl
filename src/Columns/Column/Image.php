@@ -11,21 +11,23 @@ class Image extends NamedColumn
     {
         parent::__construct($name);
         $this->setOrderable(false);
+
+        $this->setAttribute('class', 'row-image');
     }
 
     /**
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return array
      */
-    public function render()
+    public function toArray()
     {
         $value = $this->getModelValue();
         if (! empty($value) && (strpos($value, '://') === false)) {
             $value = asset($value);
         }
 
-        return app('sleeping_owl.template')->view('column.image', [
+        return parent::toArray() + [
             'value'  => $value,
             'append' => $this->getAppend(),
-        ]);
+        ];
     }
 }

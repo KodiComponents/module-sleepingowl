@@ -109,6 +109,7 @@ class Select extends BaseColumnFilter
         if (! is_null($this->getModel()) and ! is_null($this->getDisplay())) {
             $this->loadOptions();
         }
+
         $options = $this->options;
         asort($options);
 
@@ -179,14 +180,17 @@ class Select extends BaseColumnFilter
         if ($search === '') {
             return;
         }
+
         if ($this->getFilterField()) {
             $query->where($this->getFilterField(), '=', $search);
 
             return;
         }
+
         if ($operator == 'like') {
             $search = '%'.$search.'%';
         }
+
         $name = $column->getName();
         if ($repository->hasColumn($name)) {
             $query->where($name, $operator, $search);
@@ -205,9 +209,11 @@ class Select extends BaseColumnFilter
         $repository = new BaseRepository($this->getModel());
         $key = $repository->getModel()->getKeyName();
         $options = $repository->query()->get()->lists($this->getDisplay(), $key);
+
         if ($options instanceof Collection) {
             $options = $options->all();
         }
+
         $options = array_unique($options);
         $this->setOptions($options);
     }

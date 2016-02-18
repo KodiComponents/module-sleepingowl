@@ -197,6 +197,7 @@ abstract class FilterBase implements FilterInterface
         if (is_null($this->value)) {
             $this->value = Input::get($this->getAlias(), $default);
         }
+
         $params = $this->getOperatorParams();
         $method = $params['method'];
         switch ($method) {

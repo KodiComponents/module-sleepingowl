@@ -59,10 +59,13 @@ class Text extends BaseColumnFilter
         if (empty($search)) {
             return;
         }
+
         if ($operator == 'like') {
             $search = '%'.$search.'%';
         }
+
         $name = $column->getName();
+
         if ($repository->hasColumn($name)) {
             $query->where($name, $operator, $search);
         } elseif (strpos($name, '.') !== false) {

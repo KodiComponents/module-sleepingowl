@@ -8,11 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 class MultiSelect extends Select
 {
     /**
-     * @var string
-     */
-    protected $view = 'multiselect';
-
-    /**
      * @return string
      */
     public function getName()
@@ -30,6 +25,7 @@ class MultiSelect extends Select
         if ($value instanceof Collection && $value->count() > 0) {
             $value = $value->lists($value->first()->getKeyName());
         }
+
         if ($value instanceof Collection) {
             $value = $value->toArray();
         }

@@ -50,6 +50,7 @@ abstract class NamedFormItem extends BaseFormItem
         $this->setLabel($label);
         $parts = explode('.', $path);
         $this->setPath($path);
+
         if (count($parts) > 1) {
             $this->setName($parts[0].'['.implode('][', array_slice($parts, 1)).']');
             $this->setAttribute(implode('.', array_slice(explode('.', $path), -1, 1)));
@@ -208,10 +209,12 @@ abstract class NamedFormItem extends BaseFormItem
         if (! is_null($value = old($this->getPath()))) {
             return $value;
         }
+
         $input = Input::all();
         if (($value = array_get($input, $this->getPath())) !== null) {
             return $value;
         }
+
         if (! is_null($model) && ! is_null($value = $model->getAttribute($this->getAttribute()))) {
             return $value;
         }
@@ -227,8 +230,10 @@ abstract class NamedFormItem extends BaseFormItem
         $rules = parent::getValidationRules();
         array_walk($rules, function (&$item) {
             $model = $this->getModel();
+
             if ($item == '_unique') {
                 $table = $model->getTable();
+
                 $item  = 'unique:'.$table.','.$this->getAttribute();
                 if ($model->exists()) {
                     $item .= ','.$model->getKey();
@@ -277,11 +282,22 @@ abstract class NamedFormItem extends BaseFormItem
     public function save()
     {
         $attribute = $this->getAttribute();
+
         if (Input::get($this->getPath()) === null) {
             $value = null;
         } else {
             $value = $this->getValue();
         }
+
+        $this->setValue($attribute, $value);
+    }
+
+    /**
+     * @param string $attribute
+     * @param mixed $value
+     */
+    protected function setValue($attribute, $value)
+    {
         $this->getModel()->setAttribute($attribute, $value);
     }
 }

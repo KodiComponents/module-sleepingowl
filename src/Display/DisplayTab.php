@@ -125,7 +125,7 @@ class DisplayTab implements Renderable, DisplayInterface, FormInterface
     }
 
     /**
-     * @return DisplayInterface
+     * @return DisplayInterface|FormInterface
      */
     public function getContent()
     {

@@ -61,7 +61,7 @@ class ColumnHeader implements Renderable
     {
         return app('sleeping_owl.template')->view('column.header', [
             'title'     => $this->getTitle(),
-            'orderable' => $this->isOrderable(),
+            'orderable' => $this->isOrderable() ? 'true' : 'false',
         ]);
     }
 
