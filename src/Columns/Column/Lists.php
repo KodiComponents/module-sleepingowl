@@ -20,7 +20,7 @@ class Lists extends NamedColumn
     {
         return parent::toArray() + [
             'values' => $this->getModelValue(),
-            'append' => $this->getAppend(),
+            'append' => $this->getAppends(),
         ];
     }
 }

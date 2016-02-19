@@ -28,7 +28,7 @@ class Filter extends NamedColumn
     public function getRelatedModel()
     {
         if (is_null($this->relatedModel)) {
-            $this->setModel(get_class($this->getModel()));
+            $this->setRelatedModel($this->getModel());
         }
 
         return $this->relatedModel;
@@ -72,9 +72,9 @@ class Filter extends NamedColumn
      */
     public function getUrl()
     {
-        $value = $this->getValue($this->getModel(), $this->getField());
+        $value = $this->getModelValue($this->getModel(), $this->getField());
 
-        return app('sleeping_owl')->getModel($this->relatedModel)->getDisplayUrl([$this->getName() => $value]);
+        return app('sleeping_owl')->getModel($this->getRelatedModel())->getDisplayUrl([$this->getName() => $value]);
     }
 
     /**
@@ -83,7 +83,7 @@ class Filter extends NamedColumn
      */
     protected function isSelf()
     {
-        return get_class($this->getModel()) == $this->getRelatedModel();
+        return get_class($this->getModel()) == get_class($this->getRelatedModel());
     }
 
     /**
@@ -95,7 +95,7 @@ class Filter extends NamedColumn
             'icon'  => $this->isSelf() ? 'fa-filter' : 'fa-arrow-circle-o-right',
             'title' => $this->isSelf() ? trans('sleepingowl::core.table.filter') : trans('sleepingowl::core.table.filter-goto'),
             'url'   => $this->getUrl(),
-            'value' => $this->getValue($this->getModel(), $this->getField()),
+            'value' => $this->getModelValue($this->getModel(), $this->getField()),
         ];
     }
 }

@@ -4,7 +4,7 @@
         <span class="panel-title">{!! $tab->getLabel() !!}</span>
     </div>
     <div class="panel-body">
-        {!! $tab->getContent() !!}
+        {!! $tab->getContent()->render() !!}
     </div>
     @endforeach
 </div>

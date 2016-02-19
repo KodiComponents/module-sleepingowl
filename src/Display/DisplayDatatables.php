@@ -6,6 +6,10 @@ use KodiCMS\SleepingOwlAdmin\Interfaces\ColumnFilterInterface;
 
 class DisplayDatatables extends DisplayTable
 {
+    const FILTER_POSITION_TOP = 0;
+    const FILTER_POSITION_BOTTOM = 2;
+    const FILTER_POSITION_BOTH = 2;
+
     /**
      * View to render.
      * @var string
@@ -25,7 +29,12 @@ class DisplayDatatables extends DisplayTable
     /**
      * @var array
      */
-    protected $attributes = [];
+    protected $datatableAttributes = [];
+
+    /**
+     * @var int
+     */
+    protected $filterPosition = self::FILTER_POSITION_BOTH;
 
     /**
      * Initialize display.
@@ -38,6 +47,42 @@ class DisplayDatatables extends DisplayTable
                 $columnFilter->initialize();
             }
         }
+
+        $this->setAttribute('data-order', json_encode($this->getOrder()));
+        $this->setAttribute('data-attributes', json_encode($this->getDatatableAttributes(), JSON_FORCE_OBJECT));
+    }
+
+    /**
+     * TODO: сделать чтобы работал
+     * @return array
+     */
+    public function getDatatableAttributes()
+    {
+        return $this->datatableAttributes;
+    }
+
+    /**
+     * @param array $datatableAttributes
+     */
+    public function setDatatableAttributes(array $datatableAttributes)
+    {
+        $this->datatableAttributes = $datatableAttributes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFilterPosition()
+    {
+        return $this->filterPosition;
+    }
+
+    /**
+     * @param int $filterPosition
+     */
+    public function setFilterPosition($filterPosition)
+    {
+        $this->filterPosition = $filterPosition;
     }
 
     /**
@@ -89,30 +134,6 @@ class DisplayDatatables extends DisplayTable
     }
 
     /**
-     * @return array
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param array|string $attributes
-     *
-     * @return $this
-     */
-    public function setAttributes($attributes)
-    {
-        if (! is_array($attributes)) {
-            $attributes = func_get_args();
-        }
-
-        $this->attributes = $attributes;
-
-        return $this;
-    }
-
-    /**
      * Get view render parameters.
      * @return array
      */
@@ -121,7 +142,7 @@ class DisplayDatatables extends DisplayTable
         $params = parent::getParams();
         $params['order'] = $this->getOrder();
         $params['columnFilters'] = $this->getColumnFilters();
-        $params['attributes'] = $this->getAttributes();
+        $params['filterPosition'] = $this->getFilterPosition();
 
         return $params;
     }

@@ -13,34 +13,31 @@
 		{!! $action !!}
 	@endforeach
 </div>
-<table class="table table-striped datatables" data-order="{{ json_encode($order) }}" data-attributes="{{ json_encode($attributes, JSON_FORCE_OBJECT) }}">
-	<thead>
-		<tr>
-			@foreach ($columns as $column)
-				{!! $column->getHeader() !!}
-			@endforeach
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			@foreach ($columns as $index => $column)
-				<?php
-					$columnFilter = array_get($columnFilters, $index);
-				?>
-				<td data-index="{{ $index }}">{!! $columnFilter !!}</td>
-			@endforeach
-		</tr>
-	</tfoot>
-	<tbody>
-		@foreach ($collection as $model)
-			<tr>
-				@foreach ($columns as $column)
-					<?php
-						$column->setModel($model);
-					?>
-					{!! $column !!}
-				@endforeach
-			</tr>
-		@endforeach
-	</tbody>
+<table {!! HTML::attributes($attributes) !!}>
+    <colgroup>
+        @foreach ($columns as $column)
+            <col width="{!! $column->getWidth() !!}" />
+        @endforeach
+    </colgroup>
+    <thead>
+        <tr>
+            @foreach ($columns as $column)
+            {!! $column->getHeader()->render() !!}
+            @endforeach
+        </tr>
+    </thead>
+    <tbody>
+    @foreach ($collection as $model)
+        <tr>
+            @foreach ($columns as $column)
+                <?php $column->setModel($model); ?>
+                {!! $column->render() !!}
+            @endforeach
+        </tr>
+    @endforeach
+    </tbody>
+
+    <tfoot>
+        @include('sleepingowl::default.columnfilter.filter_list')
+    </tfoot>
 </table>

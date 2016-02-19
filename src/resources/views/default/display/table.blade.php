@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <table class="table table-primary table-striped table-hover">
+    <table {!! HTML::attributes($attributes) !!}>
         <colgroup>
             @foreach ($columns as $column)
             <col width="{!! $column->getWidth() !!}" />

@@ -27,7 +27,7 @@ class Image extends NamedColumn
 
         return parent::toArray() + [
             'value'  => $value,
-            'append' => $this->getAppend(),
+            'append' => $this->getAppends(),
         ];
     }
 }

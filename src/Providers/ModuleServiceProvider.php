@@ -4,6 +4,7 @@ namespace KodiCMS\SleepingOwlAdmin\Providers;
 
 use Route;
 use Event;
+use ModulesLoader;
 use ModulesFileSystem;
 use KodiCMS\Navigation\Navigation;
 use KodiCMS\Support\ServiceProvider;

@@ -3,6 +3,7 @@
 namespace KodiCMS\SleepingOwlAdmin\Columns\Column;
 
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 
 class Custom extends BaseColumn
 {
@@ -68,7 +69,7 @@ class Custom extends BaseColumn
     {
         return parent::toArray() + [
             'value'  => $this->getValue($this->getModel()),
-            'append' => $this->getAppend(),
+            'append' => $this->getAppends(),
         ];
     }
 }

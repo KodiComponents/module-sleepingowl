@@ -279,7 +279,8 @@ class ModelConfiguration
         if (! is_callable($this->edit)) {
             return;
         }
-        $edit = app()->call($this->edit, [$id]);
+
+        $edit = app()->call($this->edit, ['id' => $id]);
         if ($edit instanceof DisplayInterface) {
             $edit->setClass($this->getClass());
             $edit->initialize();
@@ -296,6 +297,7 @@ class ModelConfiguration
     public function fireFullEdit($id)
     {
         $edit = $this->fireEdit($id);
+
         if ($edit instanceof FormInterface) {
             $edit->setAction($this->getUpdateUrl($id));
             $edit->setId($id);

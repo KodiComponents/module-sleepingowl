@@ -51,7 +51,7 @@ abstract class BaseColumnFilter implements Renderable, ColumnFilterInterface, Ar
      */
     public function render()
     {
-        return app('sleeping_owl.template')->view('columnfilter.'.$this->getView(), $this->getParams());
+        return app('sleeping_owl.template')->view('columnfilter.'.$this->getView(), $this->getParams())->render();
     }
 
     /**

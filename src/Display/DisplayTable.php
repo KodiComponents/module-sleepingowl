@@ -5,6 +5,7 @@ namespace KodiCMS\SleepingOwlAdmin\Display;
 use Input;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use KodiCMS\Support\Traits\HtmlAttributes;
 use Illuminate\Contracts\Support\Renderable;
 use KodiCMS\SleepingOwlAdmin\Columns\Column;
 use KodiCMS\SleepingOwlAdmin\Model\ModelConfiguration;
@@ -18,6 +19,8 @@ use KodiCMS\SleepingOwlAdmin\Interfaces\ColumnActionInterface;
 
 class DisplayTable implements Renderable, DisplayInterface
 {
+    use HtmlAttributes;
+
     /**
      * @var string
      */
@@ -88,9 +91,17 @@ class DisplayTable implements Renderable, DisplayInterface
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
     public function initialize()
     {
-        $this->repository = new BaseRepository($this->class);
+        $this->repository = new BaseRepository($this->getClass());
         $this->repository->setWith($this->getWith());
         $this->initializeFilters();
         foreach ($this->getAllColumns() as $column) {
@@ -98,6 +109,8 @@ class DisplayTable implements Renderable, DisplayInterface
                 $column->initialize();
             }
         }
+
+        $this->setAttribute('class', 'table table-striped');
     }
 
     /**
@@ -163,6 +176,8 @@ class DisplayTable implements Renderable, DisplayInterface
     public function setApply(Closure $apply)
     {
         $this->apply = $apply;
+
+        return $this;
     }
 
     /**
@@ -214,12 +229,8 @@ class DisplayTable implements Renderable, DisplayInterface
      *
      * @return $this
      */
-    public function setScopes($scopes)
+    public function setScopes(array $scopes)
     {
-        if (! is_array($scopes)) {
-            $scopes = func_get_args();
-        }
-
         $this->scopes = $scopes;
 
         return $this;
@@ -232,7 +243,11 @@ class DisplayTable implements Renderable, DisplayInterface
      */
     public function appendScope($scope)
     {
-        $this->filters[] = $scope;
+        if (! is_array($scope)) {
+            $scope = func_get_args();
+        }
+
+        $this->scopes[] = $scope;
 
         return $this;
     }
@@ -329,7 +344,7 @@ class DisplayTable implements Renderable, DisplayInterface
     {
         foreach ($this->actions as $action) {
             $action->setUrl($this->getModel()->getDeleteUrl([
-                '_action' => $action->name(),
+                '_action' => $action->getName(),
                 '_ids'    => '',
             ]));
         }
@@ -378,6 +393,7 @@ class DisplayTable implements Renderable, DisplayInterface
             'creatable' => ! is_null($model->fireCreate()),
             'createUrl' => $model->getCreateUrl($this->getParameters() + Input::all()),
             'actions'   => $this->getActions(),
+            'attributes' => $this->getAttributes()
         ];
     }
 
@@ -392,6 +408,11 @@ class DisplayTable implements Renderable, DisplayInterface
         $params['collection'] = $query->get();
 
         return app('sleeping_owl.template')->view('display.'.$this->view, $params);
+    }
+
+    public function getColection()
+    {
+
     }
 
     /**
@@ -469,6 +490,7 @@ class DisplayTable implements Renderable, DisplayInterface
         foreach ($this->getScopes() as $scope) {
             if (! is_null($scope)) {
                 $method = array_shift($scope);
+
                 call_user_func_array([
                     $query,
                     $method,
@@ -487,7 +509,7 @@ class DisplayTable implements Renderable, DisplayInterface
      */
     protected function getModel()
     {
-        return app('sleeping_owl')->getModel($this->class);
+        return app('sleeping_owl')->getModel($this->getClass());
     }
 
     /**

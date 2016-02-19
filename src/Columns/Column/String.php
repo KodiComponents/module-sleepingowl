@@ -22,7 +22,7 @@ class String extends NamedColumn
     {
         return parent::toArray() + [
             'value'  => $this->getModelValue(),
-            'append' => $this->getAppend(),
+            'append' => $this->getAppends(),
         ];
     }
 }

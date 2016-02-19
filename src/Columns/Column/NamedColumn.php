@@ -65,9 +65,9 @@ abstract class NamedColumn extends BaseColumn implements NamedColumnInterface
         $part = array_shift($parts);
 
         if ($instance instanceof Collection) {
-            $instance = $instance->lists($part);
+            $instance = $instance->pluck($part);
         } else {
-            $instance = $instance->{$part};
+            $instance = $instance->getAttribute($part);
         }
 
         if (! empty($parts) && ! is_null($instance)) {

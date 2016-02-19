@@ -42,7 +42,7 @@ class Link extends NamedColumn
         return parent::toArray() + [
             'value'          => $this->getModelValue(),
             'link'           => $this->getModelConfiguration()->getEditUrl($this->getModel()->getKey()),
-            'append'         => $this->getAppend(),
+            'append'         => $this->getAppends(),
             'linkAttributes' => $this->getLinkAttributes()
         ];
     }

@@ -50,7 +50,7 @@ class Range extends BaseColumnFilter
      */
     public function setFrom(ColumnFilterInterface $from)
     {
-        $this->from = (int) $from;
+        $this->from = $from;
 
         return $this;
     }
@@ -70,7 +70,7 @@ class Range extends BaseColumnFilter
      */
     public function setTo(ColumnFilterInterface $to)
     {
-        $this->to = (int) $to;
+        $this->to = $to;
 
         return $this;
     }

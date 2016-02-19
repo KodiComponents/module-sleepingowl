@@ -60,6 +60,10 @@ class SleepingOwlAdmin
      */
     public function getModel($class)
     {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+
         if (! $this->hasModel($class)) {
             $this->registerModel($class);
         }

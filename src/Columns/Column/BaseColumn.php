@@ -112,7 +112,7 @@ abstract class BaseColumn implements Renderable, ColumnInterface, Arrayable
     /**
      * @return ColumnInterface
      */
-    public function getAppend()
+    public function getAppends()
     {
         return $this->append;
     }
@@ -122,7 +122,7 @@ abstract class BaseColumn implements Renderable, ColumnInterface, Arrayable
      *
      * @return $this
      */
-    public function setAppend(ColumnInterface $append)
+    public function append(ColumnInterface $append)
     {
         $this->append = $append;
 
@@ -145,9 +145,9 @@ abstract class BaseColumn implements Renderable, ColumnInterface, Arrayable
     public function setModel(Model $model)
     {
         $this->model = $model;
-        $append = $this->getAppend();
+        $append = $this->getAppends();
 
-        if (! is_null($append) && ($append instanceof ColumnInterface)) {
+        if (! is_null($append)) {
             $append->setModel($model);
         }
 

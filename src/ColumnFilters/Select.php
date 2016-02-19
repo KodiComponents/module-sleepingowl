@@ -50,12 +50,21 @@ class Select extends BaseColumnFilter
     }
 
     /**
-     * @param Model $model
+     * @param Model|string $model
      *
      * @return $this
+     * @throws \Exception
      */
-    public function setModel(Model $model)
+    public function setModel($model)
     {
+        if (is_string($model) and class_exists($model)) {
+            $model = new $model;
+        }
+
+        if (! ($model instanceof Model)) {
+            throw new \Exception('Model must be an instance of Illuminate\Database\Eloquent\Model');
+        }
+
         $this->model = $model;
 
         return $this;
@@ -155,7 +164,7 @@ class Select extends BaseColumnFilter
     {
         return parent::getParams() + [
             'options'     => $this->getOptions(),
-            'placeholder' => $this->getPlaceholder(),
+            'placeholder' => $this->getPlaceholder()
         ];
     }
 
@@ -208,7 +217,7 @@ class Select extends BaseColumnFilter
     {
         $repository = new BaseRepository($this->getModel());
         $key = $repository->getModel()->getKeyName();
-        $options = $repository->query()->get()->lists($this->getDisplay(), $key);
+        $options = $repository->getQuery()->get()->lists($this->getDisplay(), $key);
 
         if ($options instanceof Collection) {
             $options = $options->all();
